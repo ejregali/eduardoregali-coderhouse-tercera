@@ -38,18 +38,36 @@ document.getElementById("pacienteForm").addEventListener("submit", function(even
 
  });
 
-function actualizarListaPacientes() { // Actualizar la lista de pacientes en la página
+// Actualizar la lista de pacientes en la página
+function actualizarListaPacientes() {
     const listaPacientes = document.getElementById("listaPacientes");
     listaPacientes.innerHTML = "";
 
-    const pacientes = JSON.parse(localStorage.getItem("pacientes")) || []; // Llamar a la lista de pacientes almacenados en localStorage
+    // Obtener la lista de pacientes almacenados en localStorage
+    const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
 
-    pacientes.forEach(function(paciente) {    // forEach de la lista y mostrar los pacientes
+    // Recorrer la lista y mostrar los pacientes en la página
+    pacientes.forEach(function(paciente) {
         const li = document.createElement("li");
         li.className = "list-group-item";
-        li.textContent = `ID: ${paciente.id}, Nombre: ${paciente.nombre}, Apellido: ${paciente.apellido}, Documento: ${paciente.documento}, Email: ${paciente.email}`;
+        li.innerHTML = `
+            ID: HC${paciente.id},
+            Nombre: ${paciente.nombre},
+            Apellido: ${paciente.apellido}, 
+            Documento: ${paciente.documento},
+            Email: ${paciente.email}
+             <button class="btn btn-danger btn-sm float-right" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+        `;
         listaPacientes.appendChild(li);
     });
+}
+
+   
+   function eliminarPaciente(id) {// Función para eliminar un paciente
+    let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+    pacientes = pacientes.filter(paciente => paciente.id !== id);
+    localStorage.setItem("pacientes", JSON.stringify(pacientes)); // Actualizar localStorage
+    actualizarListaPacientes();
 }
 
 actualizarListaPacientes();
