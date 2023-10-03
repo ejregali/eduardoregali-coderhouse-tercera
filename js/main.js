@@ -1,27 +1,36 @@
-// Render Productos
-const productos = [
-    {id:1, nombre: "Gaseosa 7 Up lima limón 1.5 1.", precio:323, imagen: "https://carrefourar.vtexassets.com/arquivos/ids/277290-1200-auto?v=638128491314900000&width=1200&height=auto&aspect=true"},
-    {id:2, nombre: "Gaseosa Pepsi black 1.5 1.", precio:330, imagen:"https://carrefourar.vtexassets.com/arquivos/ids/191207-1200-auto?v=637511787821470000&width=1200&height=auto&aspect=true"},
-    {id: 3, nombre: "Gaseosa pomelo sin azúcar Paso De Los Toros pet 1.5 l.", precio:280.56, imagen: "https://carrefourar.vtexassets.com/arquivos/ids/308945-1200-auto?v=638146793700400000&width=1200&height=auto&aspect=true"},
-    {id:4, nombre: "Gaseosa Schweppes tónica 1.5 1.", precio:576, imagen: "https://carrefourar.vtexassets.com/arquivos/ids/332234-1200-auto?v=638211437653630000&width=1200&height=auto&aspect=true"},
-    {id:5, nombre: "Gaseosa cola zero Coca Cola pet 2.25 lts.", precio:833, imagen: "https://carrefourar.vtexassets.com/arquivos/ids/333788-1200-auto?v=638215824531870000&width=1200&height=auto&aspect=true"},
-    {id:6, nombre: "Schweppes zero pomelo 2,25 lts.", precio:802, imagen: "https://carrefourar.vtexassets.com/arquivos/ids/378997-1200-auto?v=638313440596100000&width=1200&height=auto&aspect=true"},
-
-];
-console.log(productos)
-let contenido = document. getElementById ("contenido");
-
-let salida  = "";
-
-for (const producto of productos) {
-salida += `
-<div class="col-md-4 card">
-    <img src="${producto.imagen}" alt="${producto.nombre}" class="card-img-top">
-    <div class="card-body">
-        <p class="card-title"><b>$${producto.precio}</b></p>
-        <p class="card-text">${producto. nombre}</p>
-    </div>
-</div>`;
+// Declaracion de la clase Paciente
+class paciente {
+    constructor(nombre, apellido, documento, email, id) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.documento = documento;
+        this.email = email;
+        this.id = id;
+    }
 };
 
-contenido.innerHTML = salida;
+// Definir un Array pacientes
+
+const pacientes = [
+    {id:1, nombre:"Eduardo", apellido:"Regali", documento:"33721152", email:"ejregali@gmail.com"},
+    {id:2, nombre:"Melina", apellido:"Machado", documento:"34460033", email:"mmachadobodiogmail.com"}
+];
+// console.log(pacientes);
+
+const guardarLocalStorage = (clave, valor) => { // Declarar funcion de guardar LS pasando JSON
+    localStorage.setItem(clave, JSON.stringify(valor));
+}
+
+const cargarLocalStorage = (clave) => { // // Declarar funcion de leer y cargar LS
+    return JSON.parse(localStorage.getItem(clave));
+}
+
+guardarLocalStorage("listaDePacientes", pacientes); // Funcion para guardar en localStorage
+
+const archivoPacientes = cargarLocalStorage("listaDePacientes") // Ejecuto cargarLocalStorage y guardo resultado en constante
+const archivo = []; //Crear nuevo array
+
+for (const itemPaciente of archivoPacientes) {
+    let objetoPaciente = new paciente(itemPaciente) // Crea una nueva instancia de la clase paciente a partir de un objeto
+    pacientes.push(objetoPaciente); // Guardat en el array archivo, un objeto a partir de una clase
+}
