@@ -9,9 +9,12 @@
     </head>
 
     <body>
-        <div class="container mt-5">
-            <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS88E-r05kAZjmvQdOYCZH4ygosXYRmE-9C4RQjHhFl7sefumHz" width="200px" style="padding: 10px;" alt="">
-            <h1>Formulario de Ingreso de Pacientes</h1>
+        <div class="container col-6 mt-5 t">
+            <div class="text-center">
+                <img src="img/logo.png" width="400px" style="padding: 10px;" alt="">
+                <h1>Formulario de Ingreso de Pacientes</h1>
+            </div>
+            
             <form id="pacienteForm" class="mt-4">
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
@@ -30,15 +33,32 @@
                     <input type="email" class="form-control" id="email" required>
                 </div>
                 </br>
-                <button type="submit" class="btn btn-primary">Agregar Paciente</button>
+                <button type="submit" class="btn btn-primary mx-auto">Agregar Paciente</button>
             </form>
         </div>
 
-    <div class="container mt-5">
-        <h2>Listado de Pacientes Ingresados</h2>
+
+    <div class="container col-6 mt-5">
+        <h2 class="text-center">Listado de Pacientes Ingresados</h2>
         <ul id="listaPacientes" class="list-group">
             <!-- Render de pacientes -->
         </ul>
+    </div>
+
+
+    <!-- Footer -->
+
+
+    <div class="container text-center">
+        <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+            </ul>
+            <img src="img/firma.png" width="250px" alt="">
+        <p class="text-center text-muted">© 2023 EJREGALI S.A.</p>
+        </footer>
     </div>
 
     <script src="js/main.js"></script>

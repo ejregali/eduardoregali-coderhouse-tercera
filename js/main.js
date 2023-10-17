@@ -1,20 +1,49 @@
-// Declaracion de la clase Paciente
-   class Paciente {
+class Paciente {
     constructor(nombre, apellido, documento, email, id) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.documento = documento;
         this.email = email;
         this.id = id;
+        this.horaIngreso = new Date(); // Hora de ingreso como objeto Date en uso horario local
     }
 }
 
-function generarID() { // Numero ID aleatorio
+function generarID() {
     return Math.floor(10000 + Math.random() * 90000);
 }
 
+function calcularTiempoTranscurrido(horaIngreso, horaActual) {
+const tiempoTranscurridoMs = horaActual - horaIngreso;
+const segundos = Math.floor(tiempoTranscurridoMs / 1000);
+const minutos = Math.floor(segundos / 60);
+const horas = Math.floor(minutos / 60);
+const dias = Math.floor(horas / 24);
 
-// Evento de envío del formulario
+if (dias > 0) {
+return `${dias} días`;
+} else if (horas > 0) {
+return `${horas} horas`;
+} else if (minutos > 0) {
+return `${minutos} minutos`;
+} else {
+return `${segundos} segundos`;
+}
+}
+
+function formatTimeInLocalTimezone(hora) {
+    if (hora instanceof Date) {
+        const options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        const offsetMinutes = hora.getTimezoneOffset();
+        const offsetHours = offsetMinutes / 60;
+        hora.setHours(hora.getHours() - offsetHours);
+        return hora.toLocaleString(undefined, options);
+    } else {
+        return "Fecha no válida";
+    }
+}
+
+
 document.getElementById("pacienteForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -26,47 +55,70 @@ document.getElementById("pacienteForm").addEventListener("submit", function(even
 
     const paciente = new Paciente(nombre, apellido, documento, email, id);
 
-    let pacientes = JSON.parse(localStorage.getItem("pacientes")) || []; // Leer y cargar LS
+    let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
 
-    pacientes.push(paciente);   //  Nuevo paciente al array
+    pacientes.push(paciente);
 
-    localStorage.setItem("pacientes", JSON.stringify(pacientes)); // Guardar LS pasando JSON
-     
-    document.getElementById("pacienteForm").reset(); // Limpiar el formulario
+    localStorage.setItem("pacientes", JSON.stringify(pacientes));
 
-    actualizarListaPacientes();     // Actualizar render en la lista de pacientes
+    document.getElementById("pacienteForm").reset();
 
- });
+    actualizarListaPacientes();
+});
 
-// Actualizar la lista de pacientes en la página
 function actualizarListaPacientes() {
     const listaPacientes = document.getElementById("listaPacientes");
     listaPacientes.innerHTML = "";
 
-    // Obtener la lista de pacientes almacenados en localStorage
     const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
 
-    // Recorrer la lista y mostrar los pacientes en la página
     pacientes.forEach(function(paciente) {
         const li = document.createElement("li");
         li.className = "list-group-item";
+        // Convertir el campo horaIngreso de paciente a un objeto Date y ajustar al uso horario local
+        const horaIngreso = new Date(paciente.horaIngreso);
+        const horaActual = new Date();
+        const tiempoTranscurrido = calcularTiempoTranscurrido(horaIngreso, horaActual);
+
         li.innerHTML = `
-            ID: HC${paciente.id},
-            Nombre: ${paciente.nombre},
-            Apellido: ${paciente.apellido}, 
-            Documento: ${paciente.documento},
-            Email: ${paciente.email}
-             <button class="btn btn-danger btn-sm float-right" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+            <table>
+                <tr>
+                    <td>Historia Clinica:</td>
+                    <td>HC${paciente.id}</td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td>${paciente.nombre}</td>
+                </tr>
+                <tr>
+                    <td>Apellido:</td>
+                    <td>${paciente.apellido}</td>
+                </tr>
+                <tr>
+                    <td>Documento:</td>
+                    <td>${paciente.documento}</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>${paciente.email}</td>
+                </tr>
+               
+                <tr>
+                    <td>Tiempo Transcurrido:</td>
+                    <td>${tiempoTranscurrido}</td>
+                </tr>
+            </table>
+
+            <button class="btn btn-danger btn-sm float-right" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
         `;
         listaPacientes.appendChild(li);
     });
 }
 
-   
-   function eliminarPaciente(id) {// Función para eliminar un paciente
+function eliminarPaciente(id) {
     let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
     pacientes = pacientes.filter(paciente => paciente.id !== id);
-    localStorage.setItem("pacientes", JSON.stringify(pacientes)); // Actualizar localStorage
+    localStorage.setItem("pacientes", JSON.stringify(pacientes));
     actualizarListaPacientes();
 }
 
