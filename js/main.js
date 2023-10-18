@@ -43,7 +43,6 @@ function formatTimeInLocalTimezone(hora) {
     }
 }
 
-
 document.getElementById("pacienteForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -64,6 +63,18 @@ document.getElementById("pacienteForm").addEventListener("submit", function(even
     document.getElementById("pacienteForm").reset();
 
     actualizarListaPacientes();
+
+    Toastify({
+        text: "SE HA AGREGADO UN NUEVO PACIENTE",
+        duration: 4000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+        background: "linear-gradient(to right, #0B2161, #0B2161)",
+        },
+    }).showToast();
 });
 
 function actualizarListaPacientes() {
@@ -81,36 +92,16 @@ function actualizarListaPacientes() {
         const tiempoTranscurrido = calcularTiempoTranscurrido(horaIngreso, horaActual);
 
         li.innerHTML = `
-            <table>
-                <tr>
-                    <td>Historia Clinica:</td>
-                    <td>HC${paciente.id}</td>
-                </tr>
-                <tr>
-                    <td>Nombre:</td>
-                    <td>${paciente.nombre}</td>
-                </tr>
-                <tr>
-                    <td>Apellido:</td>
-                    <td>${paciente.apellido}</td>
-                </tr>
-                <tr>
-                    <td>Documento:</td>
-                    <td>${paciente.documento}</td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td>${paciente.email}</td>
-                </tr>
-               
-                <tr>
-                    <td>Tiempo Transcurrido:</td>
-                    <td>${tiempoTranscurrido}</td>
-                </tr>
-            </table>
-
-            <button class="btn btn-danger btn-sm float-right" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
-        `;
+        <div class="card">
+            <div class="card-body col-6">
+                <h4 class="card-title">HC${paciente.id}</h4> 
+                <h3 class="card-title">${paciente.nombre} ${paciente.apellido}</h3>
+                <p class="card-text">DNI: ${paciente.documento}</p>
+                <p class="card-text">DNI: ${paciente.email}</p>
+                <p class="card-text">Tiempo de espera: ${tiempoTranscurrido}</p>
+                <button class="btn card-link btn-danger btn-sm float-right" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+            </div>
+        </div>`;
         listaPacientes.appendChild(li);
     });
 }
@@ -120,6 +111,19 @@ function eliminarPaciente(id) {
     pacientes = pacientes.filter(paciente => paciente.id !== id);
     localStorage.setItem("pacientes", JSON.stringify(pacientes));
     actualizarListaPacientes();
+
+    Toastify({
+        text: "EL PACIENTE HA SIDO ELIMINADO",
+        duration: 4000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+        background: "red",
+        },
+    }).showToast();
+
 }
 
 actualizarListaPacientes();
